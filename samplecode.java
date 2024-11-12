@@ -27,17 +27,60 @@ public TurnOffCommand(Device device){
     device.turnOff();
   }
 }
-class TV implements Device { //concrete reciever
+
+//Concrete command for adjusting stove heat level
+class HeatLevelCommand implements Command{
+private Stove stove;
+  public HeatLevelCommand(Stove stove){
+    this.stove=stove;
+  }
+  @Override
+    public void execute(){
+      stove.adjustHeatLevel();
+    }
+}
+//Concrete command for blender's blade speed speed
+class BlenderBladeSpeedCommand implements Command{
+  private Blender blender;
+  public BlenderBladeSpeed(Blender blender){
+    this.blender =blender;
+  }
+  @Override
+    public void execute(){
+      blender.bladeSpeed();
+    }
+}
+interface Device{//Receiver interface
+  void turnOn();
+  void turnOff();
+}
+class Stove implements Device { //concrete reciever for Stove
     @Override
     public void turnOn() {
-        System.out.println("TV is now on");
+        System.out.println("Stove is now on");
     }
 
     @Override
     public void turnOff() {
-        System.out.println("TV is now off");
+        System.out.println("Stove is now off");
     }
+  public void adjustHeatLevel() {
+    System.out.println("Heat level adjusted);
 
+}
+//Concrete Receiver for blander
+Class Blender implements Device{
+  @Override
+  public void turnOn(){
+    System.out.println("Blender is now on");
+  }
+  @Override
+  public void turnOff(){
+    System.out.ln("Blender is now off");
+  }
+  public void bladeSpeed(){
+    system.out.println("blade is now spinning");
+  }
 }
 class RemoteControl { //the invoker
     private Command command;
@@ -51,24 +94,28 @@ class RemoteControl { //the invoker
     }
 }
 
-// Example usage
+// usage
 public class CommandPatternExample {
     public static void main(String[] args) {
         // Create devices
-        TV tv = new TV();
-
+        Stove stove = new Stove();
+        Blender blender = new Blender();
         // Create command objects
-        Command turnOnTVCommand = new TurnOnCommand(tv);
-        Command turnOffTVCommand = new TurnOffCommand(tv);
-    
+        Command turnOnStoveCommand = new TurnOnCommand(stove);
+        Command turnOffStoveCommand = new TurnOffCommand(stove);
+        Command heatLevelCommand = new HeatLevelCommand(stove);
+        Command blenderBladeSpeedCommand = new BlenderBladeSpeedCommand(blendere);
         // Create remote control
         RemoteControl remote = new RemoteControl();
 
         // Set and execute commands
-        remote.setCommand(turnOnTVCommand);
-        remote.pressButton(); // Outputs: TV is now on
-
+        remote.setCommand(turnOnStoveCommand);
+        remote.pressButton(); // Outputs: Stove is now on
+        
+        remote.setCommand(heatLevelCommand);
+        remote.pressButton();
+      
         remote.setCommand(turnOffTVCommand);
-        remote.pressButton(); // Outputs: TV is now off
+        remote.pressButton(); // Outputs: Stove is now off
     }
 }
